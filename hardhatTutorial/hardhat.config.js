@@ -14,7 +14,7 @@ task("accounts", "Prints the list of accounts", async (taskArgs, hre) => {
 
 module.exports = {
   solidity: "0.8.19",
-  defaultNetwork:"hardhat",
+  defaultNetwork:"sepolia",
   networks:{
     hardhat:{},
     sepolia: {
