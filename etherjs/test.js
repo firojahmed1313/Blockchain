@@ -15,7 +15,7 @@ async function call() {
     console.log(ethers.formatEther(bal));
 
     const add = (await wallet.getAddress())
-    console.log(add);
+    //console.log(add);
     console.log (await add.balance);
 /*
     const trans = await wallet.sendTransaction(
