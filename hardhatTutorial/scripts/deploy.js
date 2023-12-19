@@ -8,12 +8,11 @@ const hre = require("hardhat");
 
 async function main() {
   
-  const Lotary = await ethers.getContractFactory("lotary");
-  const lotary= await Lotary.deploy();
-  await lotary.waitForDeployment();
+  const CarPool = await ethers.getContractFactory("CarpoolingSystem");
+  const carPool= await CarPool.deploy();
+  await carPool.waitForDeployment();
 
-    console.log("Contact depoly on this address" ,lotary.target);
-    //console.log(lotary)
+    console.log("Contact depoly on this address" ,carPool.target);
   
 }
 
