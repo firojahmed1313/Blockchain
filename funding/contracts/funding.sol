@@ -21,7 +21,9 @@ contract funding {
         owner.transfer(msg.value);
         AllData.push(Data(name, message, block.timestamp, msg.sender));
     }
-
+    function massagef() public view returns (address){
+        return owner;
+    }
     function getData() public view returns (Data[] memory) {
         return AllData;
     }
