@@ -5,22 +5,64 @@
 // will compile your contracts, add the Hardhat Runtime Environment's members to the
 // global scope, and execute the script.
 const hre = require("hardhat");
-const { ethers } = require("hardhat");
-const { parseEther } = require("@ethersproject/units");
+//const { ethers } = require("hardhat");
+const { parseEther,formatEther } = require("@ethersproject/units");
 
+async function getBalances(address) {
+  const balanceBigInt = await hre.ethers.provider.getBalance(address);
+  return formatEther(balanceBigInt);
+}
+  
+
+async function cosoleBalances(addresses) {
+  let counter = 0;
+  for (const address of addresses) {
+    console.log(`Address ${counter} balance:`, await getBalances(address));
+    counter++;
+  }
+}
+async function consoleMemos(allData) {
+  for (const data of allData) {
+    const timestamp = data.timestamp;
+    const name = data.name;
+    const from = data.from;
+    const message = data.message;
+    console.log(
+      `At ${timestamp},name ${name},address ${from},message ${message}`
+    );
+  }
+}
 async function main() {
-  /*const Funding = await ethers.getContractFactory("funding");
+  const Funding = await hre.ethers.getContractFactory("funding");
   const fundingDeploy= await Funding.deploy();
-  await fundingDeploy.waitForDeployment();*/
-  const fundingDeploy = await hre.ethers.deployContract("funding");
-
-  console.log(fundingDeploy.target);
-  const valueToSend = parseEther("1");
+  await fundingDeploy.waitForDeployment();
+  const [owner, from1, from2, from3] = await hre.ethers.getSigners();//given by hardhat 
+  
+  //const fundingDeploy = await hre.ethers.deployContract("funding");
+  /*const valueToSend = parseEther("2").toString();
   const data = await fundingDeploy.sendMoney("firoj","test massage" ,{
     value: valueToSend,
   });
   await data.wait();
-  console.log(data);
+  console.log(data);*/
+  console.log(fundingDeploy.target);
+  const addresses = [
+    owner.address,
+    from1.address,
+    from2.address,
+    from3.address,
+  ];
+  console.log("Before buying chai");
+  await cosoleBalances(addresses); 
+  const amount = { value: parseEther("2").toString() };
+  await fundingDeploy.connect(from1).sendMoney("from1", "Very nice chai", amount);
+  await fundingDeploy.connect(from2).sendMoney("from2", "Very nice course", amount);
+  await fundingDeploy.connect(from3).sendMoney("from3", "Very nice information", amount);
+  console.log("After buying chai");
+  await cosoleBalances(addresses);
+
+  const allData = await fundingDeploy.getData();
+  consoleMemos(allData);
 
 }
 
